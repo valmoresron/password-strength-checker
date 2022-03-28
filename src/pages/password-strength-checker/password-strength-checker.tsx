@@ -79,7 +79,7 @@ function PasswordStrengthChecker() {
   };
 
   return (
-    <div id="page-container" className="row justify-content-md-center">
+    <div id="page-container" className="row">
       <div className="col">
         <div className="d-flex justify-content-center">
           <div id="password-strength-checker-container">

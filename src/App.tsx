@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/password-strength-checker" />} />
+        <Route path="/" element={<Navigate replace to="/password-strength-checker" />} />
         <Route path="/password-strength-checker" element={<PasswordStrengthChecker />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
