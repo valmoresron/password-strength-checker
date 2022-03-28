@@ -15,7 +15,7 @@ function PasswordInput() {
   };
 
   return (
-    <div id="password-input-container">
+    <div>
       <input
         id="password"
         className="text-center"
@@ -23,13 +23,15 @@ function PasswordInput() {
         placeholder="Type a password"
         onChange={handleInputChange}
       />
-      <button
-        id="btn-toggle-visibility"
-        className={classNames({ "d-none": !value })}
-        onClick={toggleVisibility}
-      >
-        {visible ? "HIDE" : "SHOW"}
-      </button>
+      <div style={{ height: 0 }}>
+        <button
+          id="btn-toggle-visibility"
+          className={classNames({ "d-none": !value })}
+          onClick={toggleVisibility}
+        >
+          {visible ? "HIDE" : "SHOW"}
+        </button>
+      </div>
     </div>
   );
 }
