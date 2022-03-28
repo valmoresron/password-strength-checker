@@ -2,6 +2,7 @@ import React from "react";
 import "./password-strength-checker.scss";
 
 import PasswordInput from "./components/password-input";
+import PasswordMeter from "./components/password-meter";
 
 function PasswordStrengthChecker() {
   return (
@@ -15,7 +16,12 @@ function PasswordStrengthChecker() {
               <span>strong enough?</span>
             </h3>
             <div className="mt-4">
-              <PasswordInput />
+              <div>
+                <PasswordInput />
+              </div>
+              <div className="mt-2">
+                <PasswordMeter />
+              </div>
             </div>
           </div>
         </div>
