@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./password-meter.scss";
+import { times } from "lodash";
 
 import {
   PasswordStrength,
@@ -21,21 +22,11 @@ function PasswordMeter(props: { passwordStrength: PasswordStrength }) {
   return (
     <div>
       <div className="row gx-1">
-        <div className="col">
-          <Meter />
-        </div>
-        <div className="col">
-          <Meter />
-        </div>
-        <div className="col">
-          <Meter />
-        </div>
-        <div className="col">
-          <Meter />
-        </div>
-        <div className="col">
-          <Meter />
-        </div>
+        {times(5).map((strength) => (
+          <div className="col" key={strength}>
+            <Meter color={props.passwordStrength >= strength ? color : defaultColor} />
+          </div>
+        ))}
       </div>
     </div>
   );

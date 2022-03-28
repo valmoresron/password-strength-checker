@@ -20,7 +20,7 @@ interface State {
 
 function PasswordStrengthChecker() {
   const defaultState: State = {
-    passwordStrength: 0,
+    passwordStrength: -1,
     passwordDescription: "",
     guessTimeStatement: "",
     suggestions: [],
@@ -29,15 +29,14 @@ function PasswordStrengthChecker() {
   const [state, setState] = useState<State>(defaultState);
 
   useEffect(() => {
-    const password = "!!";
+    const password = "rrr123-";
     getPasswordStrength(password).then((response) => {
       const passwordStrength = response.score;
       const suggestions = response.suggestions ?? [];
       const warning = response.warning ?? "";
 
       const description = getPasswordStrengthDescription(passwordStrength);
-      const punctuation =
-        passwordStrength >= PasswordStrength.Medium ? "." : "!";
+      const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
       const passwordDescription = `Your password is ${description}${punctuation}`;
 
       const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
@@ -66,7 +65,7 @@ function PasswordStrengthChecker() {
               <PasswordInput />
             </div>
             <div className="mt-2">
-              <PasswordMeter passwordStrength={0} />
+              <PasswordMeter passwordStrength={state.passwordStrength} />
             </div>
 
             <div className="mt-5 text-center">
