@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./password-meter.scss";
 
-import PasswordStrength from "../../../../utils/constants/password-strength";
-import { getPasswordStrengthColor } from "../../../../utils/password-strength-color";
+import {
+  PasswordStrength,
+  getPasswordStrengthColor,
+} from "../../../../utils/constants/password-strength";
 
 import Meter from "./components/meter";
 
