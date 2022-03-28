@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import "./password-strength-checker.scss";
 
 import {
@@ -27,18 +27,22 @@ function PasswordStrengthChecker() {
     warning: "",
   };
   const [state, setState] = useState<State>(defaultState);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const password = "rrr123-";
+    if (!password) {
+      setState(defaultState);
+      return;
+    }
+
     getPasswordStrength(password).then((response) => {
       const passwordStrength = response.score;
       const suggestions = response.suggestions ?? [];
       const warning = response.warning ?? "";
-
       const description = getPasswordStrengthDescription(passwordStrength);
-      const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
+      const punctuation =
+        passwordStrength >= PasswordStrength.Medium ? "." : "!";
       const passwordDescription = `Your password is ${description}${punctuation}`;
-
       const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
 
       const newState: State = {
@@ -48,21 +52,23 @@ function PasswordStrengthChecker() {
         passwordDescription,
         guessTimeStatement,
       };
-      console.log(response);
-      console.log(newState);
       setState(newState);
     });
-  }, []);
+  }, [password]);
+
+  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
 
   return (
     <div className="row mt-5 justify-content-md-center">
-      <div className="col-3">
+      <div className="col">
         <div className="d-flex justify-content-center">
-          <div>
+          <div id="password-strength-checker-container">
             <h3 className="text-center">Is your password strong enough?</h3>
 
             <div className="mt-4">
-              <PasswordInput />
+              <PasswordInput onChange={handlePasswordInputChange} />
             </div>
             <div className="mt-2">
               <PasswordMeter passwordStrength={state.passwordStrength} />
