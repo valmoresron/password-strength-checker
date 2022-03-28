@@ -17,7 +17,7 @@ function PasswordMeter(props: { passwordStrength: PasswordStrength }) {
   }, [props]);
 
   return (
-    <div id="password-meter-container">
+    <div>
       <div className="row gx-1">
         <div className="col">
           <Meter />
