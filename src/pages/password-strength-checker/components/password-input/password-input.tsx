@@ -39,6 +39,7 @@ function PasswordInput(props: {
         placeholder="Type a password"
         spellCheck="false"
         ref={inputRef}
+        autoFocus
         onChange={handleChange}
       />
       <button
