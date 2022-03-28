@@ -1,5 +1,7 @@
+import PasswordStrength from "../../utils/constants/password-strength";
+
 export interface PasswordStrengthCheckerResponse {
-  score: number;
+  score: PasswordStrength;
   guessTimeSeconds: number;
   guessTimeString: string;
   warning: string;

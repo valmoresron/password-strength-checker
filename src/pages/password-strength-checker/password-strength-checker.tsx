@@ -20,7 +20,7 @@ function PasswordStrengthChecker() {
                 <PasswordInput />
               </div>
               <div className="mt-2">
-                <PasswordMeter />
+                <PasswordMeter passwordStrength={0} />
               </div>
             </div>
           </div>
