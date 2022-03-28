@@ -10,6 +10,13 @@ function PasswordInput(props: { onChange?: (e: ChangeEvent<HTMLInputElement>) =>
     setVisible(!visible);
   };
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+    if (props.onChange) {
+      props.onChange(event);
+    }
+  }
+
   return (
     <div>
       <input
@@ -17,7 +24,7 @@ function PasswordInput(props: { onChange?: (e: ChangeEvent<HTMLInputElement>) =>
         className="text-center"
         type={visible ? "text" : "password"}
         placeholder="Type a password"
-        onChange={props.onChange}
+        onChange={handleChange}
       />
       <button
         id="btn-toggle-visibility"

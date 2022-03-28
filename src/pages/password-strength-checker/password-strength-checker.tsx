@@ -1,11 +1,13 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
 import "./password-strength-checker.scss";
+
+import { debounce } from "lodash";
 
 import {
   PasswordStrength,
   getPasswordStrengthDescription,
 } from "../../utils/constants/password-strength";
-import { getPasswordStrength } from "../../api/password-strength";
+import { apiGetPasswordStrength } from "../../api/password-strength";
 
 import PasswordInput from "./components/password-input";
 import PasswordMeter from "./components/password-meter";
@@ -19,13 +21,15 @@ interface State {
 }
 
 function PasswordStrengthChecker() {
-  const defaultState: State = {
-    passwordStrength: -1,
-    passwordDescription: "",
-    guessTimeStatement: "",
-    suggestions: [],
-    warning: "",
-  };
+  const defaultState = useMemo((): State => {
+    return {
+      passwordStrength: -1,
+      passwordDescription: "",
+      guessTimeStatement: "",
+      suggestions: [],
+      warning: "",
+    };
+  }, []);
   const [state, setState] = useState<State>(defaultState);
   const [password, setPassword] = useState("");
 
@@ -35,12 +39,13 @@ function PasswordStrengthChecker() {
       return;
     }
 
-    getPasswordStrength(password).then((response) => {
+    apiGetPasswordStrength(password).then((response) => {
       const passwordStrength = response.score;
       const suggestions = response.suggestions ?? [];
       const warning = response.warning ?? "";
       const description = getPasswordStrengthDescription(passwordStrength);
-      const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
+      const punctuation =
+        passwordStrength >= PasswordStrength.Medium ? "." : "!";
       const passwordDescription = `Your password is ${description}${punctuation}`;
       const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
 
@@ -53,10 +58,15 @@ function PasswordStrengthChecker() {
       };
       setState(newState);
     });
-  }, [password]);
+  }, [password, defaultState]);
 
-  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const debouncedSetPassword = debounce((password) => {
+    setPassword(password);
+  }, 500);
+  const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const password = event.target.value;
+    debouncedSetPassword.cancel();
+    debouncedSetPassword(password);
   };
 
   return (
