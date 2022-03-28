@@ -12,16 +12,14 @@ function PasswordStrengthChecker() {
           <div>
             <h3 className="text-center">Is your password strong enough?</h3>
 
-            <div className="mt-4 mb-5">
-              <div>
-                <PasswordInput />
-              </div>
-              <div className="mt-2">
-                <PasswordMeter passwordStrength={0} />
-              </div>
+            <div className="mt-4">
+              <PasswordInput />
+            </div>
+            <div className="mt-2">
+              <PasswordMeter passwordStrength={0} />
             </div>
 
-            <div className="text-center">
+            <div className="mt-5 text-center">
               <h4>Your password is too weak!</h4>
               <p className="mt-5">
                 It will take less than a second to guess your password. This is
