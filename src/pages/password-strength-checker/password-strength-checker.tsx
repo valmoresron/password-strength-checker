@@ -1,0 +1,27 @@
+import React from "react";
+import "./password-strength-checker.scss";
+
+import PasswordInput from "./components/password-input";
+
+function PasswordStrengthChecker() {
+  return (
+    <div className="row mt-5">
+      <div className="col">
+        <div className="d-flex justify-content-center">
+          <div>
+            <h3 className="text-center">
+              <span>Is your password</span>
+              <br />
+              <span>strong enough?</span>
+            </h3>
+            <div className="mt-4">
+              <PasswordInput />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default PasswordStrengthChecker;
