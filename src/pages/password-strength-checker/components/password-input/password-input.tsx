@@ -1,13 +1,15 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, useRef, ChangeEvent } from "react";
 import classNames from "classnames";
 import "./password-input.scss";
 
 function PasswordInput(props: { onChange?: (e: ChangeEvent<HTMLInputElement>) => void }) {
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const toggleVisibility = () => {
     setVisible(!visible);
+    inputRef.current?.focus();
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +27,7 @@ function PasswordInput(props: { onChange?: (e: ChangeEvent<HTMLInputElement>) =>
         type={visible ? "text" : "password"}
         placeholder="Type a password"
         spellCheck="false"
+        ref={inputRef}
         onChange={handleChange}
       />
       <button
