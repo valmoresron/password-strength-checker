@@ -24,6 +24,7 @@ function PasswordInput(props: { onChange?: (e: ChangeEvent<HTMLInputElement>) =>
         className="text-center"
         type={visible ? "text" : "password"}
         placeholder="Type a password"
+        spellCheck="false"
         onChange={handleChange}
       />
       <button
