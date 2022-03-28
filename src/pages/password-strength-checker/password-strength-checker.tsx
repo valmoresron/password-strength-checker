@@ -79,7 +79,7 @@ function PasswordStrengthChecker() {
   };
 
   return (
-    <div className="row mt-5 justify-content-md-center">
+    <div id="page-container" className="row justify-content-md-center">
       <div className="col">
         <div className="d-flex justify-content-center">
           <div id="password-strength-checker-container">
@@ -92,18 +92,15 @@ function PasswordStrengthChecker() {
               <PasswordInput onChange={handlePasswordInputChange} />
             </div>
             <div className="mt-2">
-              <PasswordMeter
-                passwordStrength={password ? state.passwordStrength : -1}
-              />
+              <PasswordMeter passwordStrength={password ? state.passwordStrength : -1} />
             </div>
 
             <div className={classNames("mt-5", "text-center", {"d-none": !password})}>
               <h4 className="placeholder-glow">
-                {isFetching ? (
-                  <span className="placeholder col-9"></span>
-                ) : (
-                  <span>{state.passwordDescription}</span>
-                )}
+                <span className={classNames({ "d-none": isFetching })}>
+                  {state.passwordDescription}
+                </span>
+                <span className={classNames("placeholder", "col-9", { "d-none": !isFetching })}></span>
               </h4>
               <p className="mt-4 placeholder-glow">
                 <span className={classNames({ "d-none": isFetching })}>
