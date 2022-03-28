@@ -40,8 +40,7 @@ function PasswordStrengthChecker() {
       const suggestions = response.suggestions ?? [];
       const warning = response.warning ?? "";
       const description = getPasswordStrengthDescription(passwordStrength);
-      const punctuation =
-        passwordStrength >= PasswordStrength.Medium ? "." : "!";
+      const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
       const passwordDescription = `Your password is ${description}${punctuation}`;
       const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
 
@@ -65,7 +64,10 @@ function PasswordStrengthChecker() {
       <div className="col">
         <div className="d-flex justify-content-center">
           <div id="password-strength-checker-container">
-            <h3 className="text-center">Is your password strong enough?</h3>
+            <h3 className="text-center">
+              <span className="d-block">Is your password</span>
+              <span className="d-block">strong enough?</span>
+            </h3>
 
             <div className="mt-4">
               <PasswordInput onChange={handlePasswordInputChange} />
