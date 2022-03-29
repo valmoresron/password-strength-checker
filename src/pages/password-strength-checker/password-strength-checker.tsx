@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
+import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
 import "./password-strength-checker.scss";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -6,43 +6,40 @@ import { debounce } from "lodash";
 import { toast, ToastOptions } from "react-toastify";
 import classNames from "classnames";
 
-import {
-  PasswordStrength,
-  getPasswordStrengthDescription,
-} from "../../utils/constants/password-strength";
 import { ToastContainer } from "react-toastify";
 import { apiGetPasswordStrength } from "../../api/password-strength";
+import { initialState, PSCResponseToState } from "../../utils/password-strength-checker";
 
 import PasswordInput from "./components/password-input";
 import PasswordMeter from "./components/password-meter";
 import Footer from "./components/footer";
 
-interface State {
-  passwordStrength: PasswordStrength;
-  passwordDescription: string;
-  guessTimeStatement: string;
-  suggestions: string[];
-  warning: string;
-}
-
 function PasswordStrengthChecker() {
-  const defaultState = useMemo((): State => {
-    return {
-      passwordStrength: -1,
-      passwordDescription: "",
-      guessTimeStatement: "",
-      suggestions: [],
-      warning: "",
-    };
-  }, []);
-  const [state, setState] = useState<State>(defaultState);
-  const [password, setPassword] = useState("");
+  const defaultState = initialState;
+  const [state, setState] = useState(defaultState);
+
   const [hasError, setHasError] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const debouncedSetPassword = debounce((password) => {
-    setPassword(password);
-  }, 500);
+  const [password, setPassword] = useState("");
+  const debouncedSetPassword = debounce((password) => { setPassword(password); }, 500);
+
+  const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const password = event.target.value;
+    debouncedSetPassword.cancel();
+    !password ? setPassword(password) : debouncedSetPassword(password);
+  };
+
+  const showToastError = useCallback(() => {
+    const toastOptions: ToastOptions = {
+      position: "top-center",
+      autoClose: 2500,
+      hideProgressBar: true,
+      draggable: false,
+    };
+    const toastMessage = "❗Unable to process the request";
+    toast(toastMessage, toastOptions);
+  }, []);
 
   useEffect(() => {
     if (!password) {
@@ -52,51 +49,18 @@ function PasswordStrengthChecker() {
 
     setIsFetching(true);
     setHasError(false);
+
     apiGetPasswordStrength(password)
       .then((response) => {
-        const passwordStrength = response.score;
-        const suggestions = response.suggestions ?? [];
-        const warning = response.warning ?? "";
-        const description = getPasswordStrengthDescription(passwordStrength);
-        const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
-        const passwordDescription = `Your password is ${description}${punctuation}`;
-        const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
-
-        const newState: State = {
-          passwordStrength,
-          suggestions,
-          warning,
-          passwordDescription,
-          guessTimeStatement,
-        };
-
-        setState(newState);
+        setState(PSCResponseToState(response));
         setIsFetching(false);
       })
       .catch(() => {
-        const toastOptions: ToastOptions = {
-          position: "top-center",
-          autoClose: 2500,
-          hideProgressBar: true,
-          draggable: false,
-        };
-        const toastMessage = "❗Unable to process the request";
-
         setState(defaultState);
         setHasError(true);
-        toast(toastMessage, toastOptions);
+        showToastError();
       });
-  }, [password, defaultState]);
-
-  const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const password = event.target.value;
-    debouncedSetPassword.cancel();
-    if (!password) {
-      setPassword(password);
-    } else {
-      debouncedSetPassword(password);
-    }
-  };
+  }, [password, defaultState, showToastError]);
 
   return (
     <div id="page-container" className="row">
