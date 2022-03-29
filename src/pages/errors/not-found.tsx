@@ -7,7 +7,7 @@ function NotFound() {
       <div className="row mt-5">
         <div className="col-12">
           <div className="d-flex justify-content-center">
-            <div className="mt-5">
+            <div className="mt-5 text-center">
               <h3>Sorry, this page isn't available.</h3>
               <p>
                 <span>The link you followed may be broken. </span>

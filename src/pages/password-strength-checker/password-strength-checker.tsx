@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
 import "./password-strength-checker.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 import { debounce } from "lodash";
+import { toast, ToastOptions } from "react-toastify";
 import classNames from "classnames";
 
 import {
   PasswordStrength,
   getPasswordStrengthDescription,
 } from "../../utils/constants/password-strength";
+import { ToastContainer } from "react-toastify";
 import { apiGetPasswordStrength } from "../../api/password-strength";
 
 import PasswordInput from "./components/password-input";
@@ -33,6 +36,7 @@ function PasswordStrengthChecker() {
   }, []);
   const [state, setState] = useState<State>(defaultState);
   const [password, setPassword] = useState("");
+  const [hasError, setHasError] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
   const debouncedSetPassword = debounce((password) => {
@@ -46,26 +50,41 @@ function PasswordStrengthChecker() {
     }
 
     setIsFetching(true);
-    apiGetPasswordStrength(password).then((response) => {
-      const passwordStrength = response.score;
-      const suggestions = response.suggestions ?? [];
-      const warning = response.warning ?? "";
-      const description = getPasswordStrengthDescription(passwordStrength);
-      const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
-      const passwordDescription = `Your password is ${description}${punctuation}`;
-      const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
+    setHasError(false);
+    apiGetPasswordStrength(password)
+      .then((response) => {
+        const passwordStrength = response.score;
+        const suggestions = response.suggestions ?? [];
+        const warning = response.warning ?? "";
+        const description = getPasswordStrengthDescription(passwordStrength);
+        const punctuation = passwordStrength >= PasswordStrength.Medium ? "." : "!";
+        const passwordDescription = `Your password is ${description}${punctuation}`;
+        const guessTimeStatement = `It will take ${response.guessTimeString} to guess your password.`;
 
-      const newState: State = {
-        passwordStrength,
-        suggestions,
-        warning,
-        passwordDescription,
-        guessTimeStatement,
-      };
+        const newState: State = {
+          passwordStrength,
+          suggestions,
+          warning,
+          passwordDescription,
+          guessTimeStatement,
+        };
 
-      setState(newState);
-      setIsFetching(false);
-    });
+        setState(newState);
+        setIsFetching(false);
+      })
+      .catch(() => {
+        const toastOptions: ToastOptions = {
+          position: "top-center",
+          autoClose: 2500,
+          hideProgressBar: true,
+          draggable: false,
+        };
+        const toastMessage = "❗Unable to process the request";
+
+        setState(defaultState);
+        setHasError(true);
+        toast(toastMessage, toastOptions);
+      });
   }, [password, defaultState]);
 
   const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -92,15 +111,15 @@ function PasswordStrengthChecker() {
               <PasswordInput onChange={handlePasswordInputChange} />
             </div>
             <div className="mt-2">
-              <PasswordMeter passwordStrength={password ? state.passwordStrength : -1} />
+              <PasswordMeter passwordStrength={password && !hasError ? state.passwordStrength : -1} />
             </div>
 
-            <div className={classNames("mt-5", "text-center", {"d-none": !password})}>
+            <div className={classNames("mt-5", "text-center", {"d-none": !password || hasError})}>
               <h4 className="placeholder-glow">
                 <span className={classNames({ "d-none": isFetching })}>
                   {state.passwordDescription}
                 </span>
-                <span className={classNames("placeholder", "col-9", { "d-none": !isFetching })}></span>
+                <span className={classNames("placeholder", "col-9", {"d-none": !isFetching})}></span>
               </h4>
               <p className="mt-4 placeholder-glow">
                 <span className={classNames({ "d-none": isFetching })}>
@@ -129,6 +148,7 @@ function PasswordStrengthChecker() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

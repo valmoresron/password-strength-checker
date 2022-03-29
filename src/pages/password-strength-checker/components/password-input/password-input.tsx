@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import classNames from "classnames";
 import "./password-input.scss";
+
+import classNames from "classnames";
 
 function PasswordInput(props: {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
