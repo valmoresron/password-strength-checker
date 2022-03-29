@@ -25,7 +25,7 @@ There are three ways to run this app - [Node.js](#running-using-node-js), [Docke
 - Make sure your your machine has Docker installed. You can follow the guide [here](https://docs.docker.com/get-docker/).
 - Navigate to the project directory and run the following commands:
   - Build the container by running `docker build -t password-strength-checker:dev .`
-  - Start the container using `docker run-it --rm -p 3000:3000 -v ${PWD}:/app -v /app/node_modules -e CHOKIDAR_USEPOLLING=true password-strength-checker:dev`
+  - Start the container using `docker run -it --rm -p 3000:3000 -v ${PWD}:/app -v /app/node_modules -e CHOKIDAR_USEPOLLING=true password-strength-checker:dev`
 - Once it is running, you can access the app by going to [localhost:3000](http://localhost:3000) on your browser.
 
 #### Running using **Docker Compose**
