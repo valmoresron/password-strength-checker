@@ -1,6 +1,12 @@
 {
   "name": "password-strength-checker",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "A simple password strength checker app",
+  "author": {
+    "name": "Francis Daniel Valmores",
+    "email": "valmoresron@gmail.com",
+    "url": "https://github.com/valmoresron/password-strength-checker"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
