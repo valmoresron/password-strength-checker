@@ -15,6 +15,7 @@ import { apiGetPasswordStrength } from "../../api/password-strength";
 
 import PasswordInput from "./components/password-input";
 import PasswordMeter from "./components/password-meter";
+import Footer from "./components/footer";
 
 interface State {
   passwordStrength: PasswordStrength;
@@ -115,35 +116,13 @@ function PasswordStrengthChecker() {
             </div>
 
             <div className={classNames("mt-5", "text-center", {"d-none": !password || hasError})}>
-              <h4 className="placeholder-glow">
-                <span className={classNames({ "d-none": isFetching })}>
-                  {state.passwordDescription}
-                </span>
-                <span className={classNames("placeholder", "col-9", {"d-none": !isFetching})}></span>
-              </h4>
-              <p className="mt-4 placeholder-glow">
-                <span className={classNames({ "d-none": isFetching })}>
-                  <span>{state.guessTimeStatement} </span>
-                  <span>{state.warning}</span>
-                </span>
-                <span className={classNames({ "d-none": !isFetching })}>
-                  <span className="placeholder col-10"></span>
-                  <span className="placeholder col-8"></span>
-                </span>
-              </p>
-              <p className="mt-4 placeholder-glow">
-                <strong className={classNames({ "d-none": isFetching })}>
-                  {state.suggestions.map((suggestion, i) => (
-                    <span className="d-block" key={i}>
-                      {suggestion}
-                    </span>
-                  ))}
-                </strong>
-                <span className={classNames({ "d-none": !isFetching })}>
-                  <strong className="placeholder col-9"></strong>
-                  <strong className="placeholder col-5"></strong>
-                </span>
-              </p>
+              <Footer
+                loading={isFetching}
+                passwordDescription={state.passwordDescription}
+                guessTimeStatement={state.guessTimeStatement}
+                suggestions={state.suggestions}
+                warning={state.warning}
+              />
             </div>
           </div>
         </div>
