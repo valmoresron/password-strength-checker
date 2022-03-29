@@ -33,7 +33,7 @@ function PasswordStrengthChecker() {
   const showToastError = useCallback(() => {
     const toastOptions: ToastOptions = {
       position: "top-center",
-      autoClose: 2500,
+      autoClose: 1500,
       hideProgressBar: true,
       draggable: false,
     };
