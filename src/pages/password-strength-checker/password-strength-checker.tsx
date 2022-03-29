@@ -22,7 +22,7 @@ function PasswordStrengthChecker() {
   const [isFetching, setIsFetching] = useState(false);
 
   const [password, setPassword] = useState("");
-  const debouncedSetPassword = debounce((password) => { setPassword(password); }, 500);
+  const debouncedSetPassword = debounce((password) => { setPassword(password); }, 700);
 
   const handlePasswordInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const password = event.target.value;
