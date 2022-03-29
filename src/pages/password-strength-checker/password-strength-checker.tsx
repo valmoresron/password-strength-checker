@@ -88,6 +88,7 @@ function PasswordStrengthChecker() {
                 warning={state.warning}
               />
             </div>
+
           </div>
         </div>
       </div>
