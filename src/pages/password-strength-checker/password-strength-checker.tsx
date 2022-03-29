@@ -42,10 +42,7 @@ function PasswordStrengthChecker() {
   }, []);
 
   useEffect(() => {
-    if (!password) {
-      setState(defaultState);
-      return;
-    }
+    if (!password) { setState(defaultState); return; }
 
     setIsFetching(true);
     setHasError(false);
