@@ -6,6 +6,10 @@ _A simple app to measure your passwords' strength_
 
 ### Quick Start
 
+Install [Git](https://git-scm.com/downloads) on your machine and clone this repo.
+
+`git clone https://github.com/valmoresron/password-strength-checker.git`
+
 There are three ways to run this app - [Node.js](#running-using-node-js), [Docker](#running-using-docker), or [Docker Compose](#running-using-docker-compose)
 
 #### Running using **Node.js**
